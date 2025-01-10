@@ -9,7 +9,8 @@
         <p class="card-text">
           <b><%= listing.title %></p></b>
           <%= listing.description %><br>
-          <%= listing.price.toLocaleString("en-IN") %><br><%= listing.location %><br>
+          &#8377; <%= Number.isFinite(listing.price) ? listing.price.toLocaleString("en-IN") : "Price not available" %> /night
+<br><%= listing.location %><br>
           <%= listing.country %>
     </div>
     </div>
