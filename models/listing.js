@@ -10,13 +10,8 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    default:
-      "https://i.cdn.newsbytesapp.com/images/28755281716927168.jpeg",
-    set: (v) =>
-      v === ""
-        ? "https://i.cdn.newsbytesapp.com/images/28755281716927168.jpeg"
-        : v,
+    url:String,
+    filename:String,
   },
   price: Number,
   location: String,
