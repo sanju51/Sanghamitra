@@ -40,6 +40,6 @@ module.exports.signup=async(req,res)=>{
                return next(err);
             }
             req.flash("success","You are logged out now");
-            res.redirect("/listings");
+            res.redirect("/");
         })
     };
