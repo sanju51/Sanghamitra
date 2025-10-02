@@ -1,4 +1,72 @@
 <% layout("/layouts/boilerplate") %>
+
+<style>
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #2c2c2c;
+    line-height: 1.6;
+  }
+
+  h3, h4, h5 {
+    font-weight: 600;
+    color: #222;
+  }
+
+  h3 { font-size: 1.75rem; margin-bottom: 1rem; }
+  h4 { font-size: 1.4rem; margin: 1.5rem 0 1rem; }
+  h5 { font-size: 1.1rem; }
+
+  .card .card-text {
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  /* Special style for description */
+  .listing-description {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: #333;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    font-family: "Georgia", "Times New Roman", serif;
+  }
+
+  .show-img {
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+  }
+
+  label {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  textarea, input, select {
+    font-size: 0.9rem;
+  }
+
+  .starability-slot label {
+    font-size: 0.85rem;
+  }
+
+  .starability-result {
+    font-size: 0.95rem;
+    color: #f6c85f;
+  }
+
+  .invalid-feedback {
+    font-size: 0.8rem;
+  }
+</style>
+
 <div class="row mt-3">
   <div class="col-8 offset-3">
     <h3><%= listing.title %></h3>
@@ -9,10 +77,12 @@
          class="card-img-top show-img" alt="listing_image">
     <div class="card-body">
       <p class="card-text">
-        Owned by <i><%= listing.owner && listing.owner.username ? listing.owner.username : "Unknown" %></i>
+        Owned by <b><i><%= listing.owner && listing.owner.username ? listing.owner.username : "Unknown" %></i></b>
       </p>
 
-      <p class="card-text"><%= listing.description || "No description available" %><br></p>
+      <!-- Description with better font -->
+      <p class="card-text listing-description"><%= listing.description || "No description available" %></p>
+
       <p class="card-text"> &#8377; <%= Number.isFinite(listing.price) ? listing.price.toLocaleString("en-IN") : "Price not available" %> /night</p>
       <p class="card-text"><%= listing.location || "Location not available" %></p>
       <p class="card-text"><%= listing.country || "Country not available" %></p>
@@ -22,7 +92,6 @@
   <br />
 
   <% 
-    // show edit/delete only if current user exists and listing.owner exists
     if (currUser && listing.owner && listing.owner._id && String(listing.owner._id) === String(currUser._id)) { 
   %>
     <div class="btns">
@@ -79,7 +148,6 @@
               <p class="card-text"><%= review.comment %></p>
             </div>
 
-            <% // only allow delete if current user is the author of the review %>
             <% if (currUser && review.author && String(review.author._id) === String(currUser._id)) { %>
               <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
                 <button class="btn btn-sm btn-dark">Delete</button>
