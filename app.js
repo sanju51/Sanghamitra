@@ -14,13 +14,12 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
-
-
+const MongoStore = require("connect-mongo");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/Sanghamitra";
+const MONGO_URL = process.env.ATLAS_DB;
 
 main()
   .then(() => {
@@ -41,8 +40,24 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const store=MongoStore.create({
+  mongoUrl:MONGO_URL,
+  touchAfter:24*60*60,
+  crypto:{
+    secret:process.env.SECRET
+},
+touchAfter:24*60*60,
+}
+
+)
+
+store.on("error",()=>{
+  console.log("session store error");
+})
+
 const sessionOptions={
-  secret:"mysupersecretcode",
+  store,
+  secret:process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie:{
@@ -52,9 +67,11 @@ const sessionOptions={
   },
 };
 
-app.get("/", (req, res) => {
-  res.send("Hi, I am root");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hi, I am root");
+// });
+
+
 
 app.use(session(sessionOptions));
 app.use(flash());
