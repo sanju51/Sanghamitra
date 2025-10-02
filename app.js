@@ -67,9 +67,9 @@ const sessionOptions={
   },
 };
 
-// app.get("/", (req, res) => {
-//   res.send("Hi, I am root");
-// });
+
+
+
 
 
 
@@ -87,6 +87,14 @@ app.use((req,res,next)=>{
   res.locals.error=req.flash("error");
   res.locals.currUser=req.user;
   next();
+});
+
+app.get("/", (req, res) => {
+  // If you want to skip homepage for logged-in users:
+  if (req.user) {
+    return res.redirect("/listings");
+  }
+  res.render("home.ejs");
 });
 
 // app.get("/demouser", async(req,res) =>{
